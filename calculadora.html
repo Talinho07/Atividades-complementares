@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Seno</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos gerais */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(to right, #74ebd5, #acb6e5);
+            color: #333;
+        }
+
+        /* Container principal */
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Título */
+        h1 {
+            margin-bottom: 20px;
+            color: #007BFF;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        /* Estilos dos labels e inputs */
+        label {
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            border-color: #007BFF;
+        }
+
+        /* Estilos do botão */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Estilo do resultado */
+        #resultado {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        /* Estilo da explicação */
+        #explicacao {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #555;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+        }
+
+        /* Mensagem de erro */
+        #resultado.error {
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Seno</h1>
+        
+        <label for="angulo">Digite o ângulo em graus:</label>
+        <input type="number" id="angulo" placeholder="Ângulo em graus">
+        <button onclick="handleSenoCalculation()">Calcular Seno</button>
+        
+        <p id="resultado"></p>
+        <p id="explicacao"></p>
+    </div>
+
+    <script>
+        // Função principal que lida com o clique do botão
+        function handleSenoCalculation() {
+            const anguloGraus = getAnguloInputValue();
+            const resultadoElemento = document.getElementById("resultado");
+            const explicacaoElemento = document.getElementById("explicacao");
+
+            if (isValidInput(anguloGraus)) {
+                const seno = calcularSeno(anguloGraus);
+                exibirResultado(anguloGraus, seno, resultadoElemento);
+                exibirExplicacao(anguloGraus, seno, explicacaoElemento);
+            } else {
+                exibirMensagemErro(resultadoElemento, explicacaoElemento);
+            }
+        }
+
+        // Obtém o valor do input
+        function getAnguloInputValue() {
+            return document.getElementById("angulo").value;
+        }
+
+        // Verifica se o input é um número válido
+        function isValidInput(value) {
+            return !isNaN(value) && value !== '';
+        }
+
+        // Calcula o seno de um ângulo em graus
+        function calcularSeno(anguloGraus) {
+            const anguloRadianos = grausParaRadianos(anguloGraus);
+            return Math.sin(anguloRadianos);
+        }
+
+        // Converte graus para radianos
+        function grausParaRadianos(graus) {
+            return graus * (Math.PI / 180);
+        }
+
+        // Exibe o resultado na página
+        function exibirResultado(anguloGraus, seno, resultadoElemento) {
+            resultadoElemento.classList.remove('error');
+            resultadoElemento.innerHTML = `O seno de ${anguloGraus}° é: ${seno.toFixed(4)}`;
+        }
+
+        // Exibe a explicação do resultado
+        function exibirExplicacao(anguloGraus, seno, explicacaoElemento) {
+            explicacaoElemento.innerHTML = `
+                O seno de um ângulo é uma razão trigonométrica que relaciona o comprimento do lado oposto ao ângulo
+                com a hipotenusa em um triângulo retângulo. Quando o ângulo é ${anguloGraus}°, o valor calculado de 
+                <strong>seno</strong> (${seno.toFixed(4)}) é derivado dessa relação.
+                <br><br>
+                O seno varia entre -1 e 1, e seus valores repetem em ciclos para ângulos maiores que 360°. 
+                `;
+        }
+
+        // Exibe uma mensagem de erro se o input for inválido
+        function exibirMensagemErro(resultadoElemento, explicacaoElemento) {
+            resultadoElemento.classList.add('error');
+            resultadoElemento.innerHTML = "Por favor, insira um número válido.";
+            explicacaoElemento.innerHTML = "";
+        }
+    </script>
+</body>
+</html>
